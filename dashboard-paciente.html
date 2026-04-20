@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Paciente</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h3 id="bienvenida"></h3><h3 id="bienvenida"></h3>
+<div class="dashboard">
+  <h2>Panel del Paciente</h2>
+
+  <!-- FORMULARIO -->
+  <div class="card">
+    <h3>Registrar Datos</h3>
+    <input type="number" id="colesterol" placeholder="Colesterol">
+    <input type="number" id="trigliceridos" placeholder="Triglicéridos">
+    <button onclick="guardarDatos()">Guardar</button>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="card">
+    <h3>Historial</h3>
+    <ul id="historial"></ul>
+  </div>
+  <div class="card">
+    <h3>Gráfica de evolución</h3>
+    <canvas id="miGrafica"></canvas>
+  </div>
+
+  <button onclick="cerrarSesion()">Cerrar sesión</button>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

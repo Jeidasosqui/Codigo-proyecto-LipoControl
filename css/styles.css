@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #007BFF, #00c6ff);
+    margin: 0;
+    color: #333;
+  }
+  
+  .container {
+    width: 320px;
+    margin: 80px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  
+  h1, h2 {
+    margin-bottom: 20px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  button, .btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-top: 10px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  button:hover, .btn:hover {
+    background: #0056b3;
+  }
+  
+  .dashboard {
+    padding: 20px;
+  }
+  
+  .card {
+    background: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 12px;
+  }
+  
+  a {
+    display: block;
+    margin-top: 15px;
+    color: #007BFF;
+    text-decoration: none;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    background: #f1f1f1;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  canvas {
+    max-width: 100%;
+    margin-top: 20px;
+  }
+
+  li button {
+    margin-left: 10px;
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  li button:hover {
+    background: darkred;
+  }
+
+/* Centrar títulos */
+.dashboard h2,
+#bienvenida,
+.card h3 {
+  text-align: center;
+}
