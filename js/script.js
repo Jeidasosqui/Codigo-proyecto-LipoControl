@@ -14,32 +14,49 @@ window.onload = function () {
   };
   
   // ====== REGISTRAR USUARIO ======
-  function registrarUsuario(e) {
-    e.preventDefault();
-  
-    const nombre = document.getElementById("nombre").value.trim();
-    const correo = document.getElementById("correo").value.trim().toLowerCase();
-    const password = document.getElementById("password").value.trim();
-  
-    const params = new URLSearchParams(window.location.search);
-    const tipo = params.get("tipo");
-  
-    if (!tipo) {
-      alert("Error: tipo de usuario no definido");
-      return;
-    }
-  
-    const usuario = { nombre, correo, password, tipo };
-  
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    usuarios.push(usuario);
-  
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
-  
-    alert("Usuario registrado correctamente");
-  
-    window.location.href = "index.html";
+  async function registrarUsuario(e) {
+  e.preventDefault();
+
+  const nombre = document.getElementById("nombre").value.trim();
+  const correo = document.getElementById("correo").value.trim().toLowerCase();
+  const password = document.getElementById("password").value.trim();
+
+  const params = new URLSearchParams(window.location.search);
+  const tipo = params.get("tipo");
+
+  if (!tipo) {
+    alert("Tipo de usuario no definido");
+    return;
   }
+
+  // INSERTAR EN SUPABASE
+  const { data, error } = await supabaseClient
+    .from("usuarios")
+    .insert([
+      {
+        nombre,
+        correo,
+        password,
+        tipo
+      }
+    ]);
+
+  if (error) {
+    console.error(error);
+
+    if (error.message.includes("duplicado")) {
+      alert("Ese correo ya está registrado");
+    } else {
+      alert("Error registrando usuario");
+    }
+
+    return;
+  }
+
+  alert("Usuario registrado correctamente");
+
+  window.location.href = "index.html";
+}
   
   // ====== LOGIN ======
   function login(e) {
