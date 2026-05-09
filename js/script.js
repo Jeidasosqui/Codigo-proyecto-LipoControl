@@ -59,31 +59,46 @@ window.onload = function () {
 }
   
   // ====== LOGIN ======
-  function login(e) {
-    e.preventDefault();
-  
-    const correo = document.querySelector("input[type='email']").value.trim().toLowerCase();
-    const password = document.querySelector("input[type='password']").value.trim();
-  
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-  
-    const usuarioEncontrado = usuarios.find(u => 
-      u.correo === correo && u.password === password
-    );
-  
-    if (!usuarioEncontrado) {
-      alert("Correo o contraseña incorrectos");
-      return;
-    }
-  
-    localStorage.setItem("usuarioActivo", JSON.stringify(usuarioEncontrado));
-  
-    if (usuarioEncontrado.tipo === "paciente") {
-      window.location.href = "dashboard-paciente.html";
-    } else {
-      window.location.href = "dashboard-medico.html";
-    }
+  async function login(e) {
+  e.preventDefault();
+
+  const correo = document
+    .querySelector("input[type='email']")
+    .value
+    .trim()
+    .toLowerCase();
+
+  const password = document
+    .querySelector("input[type='password']")
+    .value
+    .trim();
+
+  // BUSCAR USUARIO EN SUPABASE
+  const { data, error } = await supabaseClient
+    .from("usuarios")
+    .select("*")
+    .eq("correo", correo)
+    .eq("password", password)
+    .single();
+
+  if (error || !data) {
+    alert("Correo o contraseña incorrectos");
+    return;
   }
+
+  // GUARDAR SESIÓN
+  localStorage.setItem(
+    "usuarioActivo",
+    JSON.stringify(data)
+  );
+
+  // REDIRECCIÓN
+  if (data.tipo === "paciente") {
+    window.location.href = "dashboard-paciente.html";
+  } else {
+    window.location.href = "dashboard-medico.html";
+  }
+}
   
   // ====== GUARDAR DATOS ======
   function guardarDatos() {
