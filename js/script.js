@@ -101,32 +101,54 @@ window.onload = function () {
 }
   
   // ====== GUARDAR DATOS ======
-  function guardarDatos() {
-    const colesterol = document.getElementById("colesterol").value;
-    const trigliceridos = document.getElementById("trigliceridos").value;
-  
-    if (!colesterol || !trigliceridos) {
-      alert("Completa todos los campos");
-      return;
-    }
-  
-    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
-  
-    const nuevoRegistro = {
-      usuario: usuario.correo,
-      colesterol: Number(colesterol),
-      trigliceridos: Number(trigliceridos),
-      fecha: new Date().toLocaleDateString()
-    };
-  
-    let datos = JSON.parse(localStorage.getItem("registros")) || [];
-    datos.push(nuevoRegistro);
-  
-    localStorage.setItem("registros", JSON.stringify(datos));
-  
-    mostrarHistorial();
-    crearGrafica();
+  async function guardarDatos() {
+
+  const colesterol = document
+    .getElementById("colesterol")
+    .value;
+
+  const trigliceridos = document
+    .getElementById("trigliceridos")
+    .value;
+
+  if (!colesterol || !trigliceridos) {
+    alert("Completa todos los campos");
+    return;
   }
+
+  // USUARIO ACTIVO
+  const usuario = JSON.parse(
+    localStorage.getItem("usuarioActivo")
+  );
+
+  // INSERTAR EN SUPABASE
+  const { data, error } = await supabaseClient
+    .from("registros")
+    .insert([
+      {
+        usuario: usuario.correo,
+        colesterol: Number(colesterol),
+        trigliceridos: Number(trigliceridos)
+      }
+    ]);
+
+  // MANEJO DE ERROR
+  if (error) {
+    console.error(error);
+    alert("Error guardando datos");
+    return;
+  }
+
+  alert("Datos guardados correctamente");
+
+  // LIMPIAR INPUTS
+  document.getElementById("colesterol").value = "";
+  document.getElementById("trigliceridos").value = "";
+
+  // RECARGAR HISTORIAL Y GRÁFICA
+  mostrarHistorial();
+  crearGrafica();
+}
   
   // ====== HISTORIAL ======
   function mostrarHistorial() {
