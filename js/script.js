@@ -151,29 +151,46 @@ window.onload = function () {
 }
   
   // ====== HISTORIAL ======
-  function mostrarHistorial() {
-    const lista = document.getElementById("historial");
-    if (!lista) return;
-  
-    lista.innerHTML = "";
-  
-    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
-    const datos = JSON.parse(localStorage.getItem("registros")) || [];
-  
-    const filtrados = datos.filter(d => d.usuario === usuario.correo);
-  
-    filtrados.forEach((dato, index) => {
-      const li = document.createElement("li");
-  
-      li.innerHTML = `
-        📅 ${dato.fecha} | Colesterol: ${dato.colesterol} | Triglicéridos: ${dato.trigliceridos}
-        <button onclick="eliminarDato(${index})">❌</button>
-      `;
-  
-      lista.appendChild(li);
-    });
+  async function mostrarHistorial() {
+
+  const lista = document.getElementById("historial");
+
+  if (!lista) return;
+
+  lista.innerHTML = "";
+
+  const usuario = JSON.parse(
+    localStorage.getItem("usuarioActivo")
+  );
+
+  const { data, error } = await supabaseClient
+    .from("registros")
+    .select("*")
+    .eq("usuario", usuario.correo);
+
+  console.log(data);
+
+  if (error) {
+    console.error(error);
+    return;
   }
-  
+
+  data.forEach((dato) => {
+
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+      Fecha: ${dato.fecha}
+      | Colesterol: ${dato.colesterol}
+      | Triglicéridos: ${dato.trigliceridos}
+    `;
+
+    lista.appendChild(li);
+
+  });
+
+}
+
   // ====== USUARIO ======
   function mostrarUsuario() {
     const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
