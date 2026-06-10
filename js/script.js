@@ -202,6 +202,10 @@ window.onload = function () {
       Fecha: ${dato.fecha}
       | Colesterol: ${dato.colesterol}
       | Triglicéridos: ${dato.trigliceridos}
+
+      <button onclick="eliminarDato(${dato.id})">
+      ❌
+      </button>
     `;
 
     lista.appendChild(li);
@@ -263,21 +267,23 @@ window.onload = function () {
   }
 
   // ====== ELIMINAR DATO =====
-  function eliminarDato(index) {
-    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
-    let datos = JSON.parse(localStorage.getItem("registros")) || [];
-  
-    // Filtrar solo los del usuario
-    const filtrados = datos.filter(d => d.usuario === usuario.correo);
-  
-    // Obtener el dato real a eliminar
-    const datoAEliminar = filtrados[index];
-  
-    // Eliminarlo del array general
-    datos = datos.filter(d => d !== datoAEliminar);
-  
-    localStorage.setItem("registros", JSON.stringify(datos));
-  
+  async function eliminarDato(id) {
+    
+    const {error} = await supabaseClient
+    .from("registros")
+    .delete()
+    .eq("id", id);
+
+    if (error) {
+      console.error(error);
+
+      alert("Error al eliminar este registro");
+
+      return;
+    }
+
+    alert("Registro eliminado");
+
     mostrarHistorial();
     crearGrafica();
   }
