@@ -1,5 +1,24 @@
 // ====== ONLOAD GENERAL ======
+function verificarSesion(){
+  const usuario = localStorage.getItem("usuarioActivo");
+
+  if (!usuario) {
+    alert("Lo siento!!Debes iniciar sesión");
+
+    window.location.href = "index.html";
+  }
+}
 window.onload = function () {
+
+    const paginaActual = window.location.pathname;
+
+    if ( 
+      paginaActual.includes("dashboard-paciente.html")||
+      paginaActual.includes("dashboard-medico.html")
+    ) {
+    verificarSesion();
+    }
+
     mostrarUsuario();
     mostrarHistorial();
     crearGrafica();
@@ -9,7 +28,7 @@ window.onload = function () {
   
     const texto = document.getElementById("tipoTexto");
     if (texto && tipo) {
-      texto.textContent = "Registrando como: " + tipo;
+      texto.textContent = "Usted se esta registrando como: " + tipo;
     }
   };
   
