@@ -10,6 +10,8 @@ function verificarSesion(){
 }
 window.onload = function () {
 
+    mostrarPacientes();
+
     const paginaActual = window.location.pathname;
 
     if ( 
@@ -22,6 +24,7 @@ window.onload = function () {
     mostrarUsuario();
     mostrarHistorial();
     crearGrafica();
+    mostrarPacientes();
   
     const params = new URLSearchParams(window.location.search);
     const tipo = params.get("tipo");
@@ -282,8 +285,41 @@ window.onload = function () {
       return;
     }
 
-    alert("Registro eliminado");
+    alert("Registro eliminado correctamente!");
 
     mostrarHistorial();
     crearGrafica();
+  }
+
+  // Medico dash
+
+  async function mostrarPacientes(){
+
+    const lista = document.getElementById("listaPacientes");
+
+    if (!lista) return;
+
+    lista.innerHTML= "";
+
+    const {data,error} = await supabaseClient
+    .from("usuarios")
+    .select("*")
+    .eq("tipo", "paciente");
+
+    if (error) {
+      console.error(error);
+
+      return;
+    }
+
+    data.forEach((paciente) => {
+
+      const li = document.createElement("li");
+
+      li.textContent =
+      paciente.nombre + " - " + paciente.correo;
+
+      lista.appendChild(li);
+
+    });
   }
