@@ -24,7 +24,6 @@ window.onload = function () {
     mostrarUsuario();
     mostrarHistorial();
     crearGrafica();
-    mostrarPacientes();
   
     const params = new URLSearchParams(window.location.search);
     const tipo = params.get("tipo");
@@ -316,10 +315,49 @@ window.onload = function () {
 
       const li = document.createElement("li");
 
-      li.textContent =
-      paciente.nombre + " - " + paciente.correo;
+    li.innerHTML = `
+      <button onclick="mostrarHistorialPaciente('${paciente.correo}')">
+      ${paciente.nombre}
+      </button>
+    `;
 
       lista.appendChild(li);
 
     });
+  }
+
+    async function mostrarHistorialPaciente(correo) {
+
+    const lista =
+      document.getElementById("historialPaciente");
+
+      if(!lista) return;
+
+      lista.innerHTML = "";
+
+      const { data, error} =
+        await supabaseClient
+          .from("registros")
+          .select("*")
+          .eq("usuario", correo);
+        
+        if (error) {
+          console.error(error);
+
+          return;
+        }
+
+        data.forEach((registro) => {
+
+          const li = document.createElement("li");
+
+          li.innerHTML = `
+            Fecha: ${registro.fecha}
+            |
+            Colesterol: ${registro.colesterol}
+            |
+            Trigliceridos: ${registro.trigliceridos}
+          `;
+          lista.appendChild(li);
+        });
   }
