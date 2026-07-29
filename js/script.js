@@ -92,16 +92,7 @@ async function login(e) {
     alert("Correo o contraseña incorrectos");
     return;
   }
-  //CALCULAR COLESTEROL TOTAL//
-  function colesteroltotal() {
-  const hdl = parseFloat(document.getElementById("colesterolhdl").value) || 0;
-  const ldl = parseFloat(document.getElementById("colesterolldl").value) || 0;
-  const vldl = parseFloat(document.getElementById("colesterolvldl").value) || 0;
 
-  const total = hdl + ldl + vldl;
-
-  document.getElementById("colesteroltotal").textContent = total;
-  }
   // GUARDAR SESIÓN
   localStorage.setItem("usuarioActivo", JSON.stringify(data));
 
@@ -136,12 +127,12 @@ async function guardarDatos() {
     .insert([{
       usuario: usuario.correo,
       colesterol: total,
-      colesterolhdl: Number(hdl),
-      colesterolldl: Number(ldl),
-      colesterolvldl: Number(vldl),
-      tipomedicion: tipomedicion,
+      colesterol_hdl: Number(hdl),
+      colesterol_ldl: Number(ldl),
+      colesterol_vldl: Number(vldl),
+      tipo_medicion: tipomedicion,
       trigliceridos: Number(trigliceridos),
-      fecha: new Date().toLocaleDateString("es-CL")
+      fecha: new Date().toISOString().split("T")[0]
     }]);
 
   if (error) {
@@ -161,8 +152,65 @@ async function guardarDatos() {
   mostrarHistorial();
   crearGrafica();
 }
+//CALCULAR COLESTEROL TOTAL//
+  function calcularcolesteroltotal() {
+  const hdl = parseFloat(document.getElementById("colesterolhdl").value) || 0;
+  const ldl = parseFloat(document.getElementById("colesterolldl").value) || 0;
+  const vldl = parseFloat(document.getElementById("colesterolvldl").value) || 0;
 
-// ====== HISTORIAL ======
+  const total = hdl + ldl + vldl;
+
+  document.getElementById("colesteroltotal").textContent = total;
+  }
+
+
+//=======EVALUAR NVELES DE COLESTEROL Y TRIGLICÉRIDOS ======
+
+
+function evaluarHDL(valor) {
+  if (valor < 40){
+    return "muy bajo, riesgo";
+  }
+  else if (valor < 60) {
+    return "al limite";
+  }
+  else   {
+    return "normal";
+  }
+}
+function evaluarLDL(valor) {
+  if (valor >= 160) {
+    return "muy alto";
+  }
+    else  if (valor >= 100) {
+      return " al limite";
+    }
+    else{
+      return "normal";
+    }
+  }
+
+function evaluarVLDL(valor) {
+  if (valor < 30){
+    return " normal";
+  }
+  else {
+    return "alto";
+  }
+}
+function evaluartrigliceridos(valor) {
+  if (valor >= 200){
+    return "muy alto";
+  }
+  else if (valor >= 150) {
+    return "al limite";
+  }
+else {
+  return"normal";
+}
+}
+
+//=======HISTORIAL ======
 async function mostrarHistorial() {
   const lista = document.getElementById("historial");
   if (!lista) return;
@@ -199,8 +247,7 @@ function mostrarUsuario() {
   const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
   if (usuario) {
     const texto = document.getElementById("bienvenida");
-    if (texto) {
-      texto.textContent = "Bienvenido, " + usuario.nombre;
+    if (texto) {      texto.textContent = "Bienvenido, " + usuario.nombre;
     }
   }
 }
