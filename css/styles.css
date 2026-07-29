@@ -1,17 +1,19 @@
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #007BFF, #00c6ff);
+    font-family: Poppins, sans-serif;
+    background: linear-gradient(135deg, #4595eb, #00c6ff);
     margin: 0;
     color: #333;
   }
   
   .container {
-    width: 320px;
-    margin: 80px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
+    width: 380px;
+    margin: 70px auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 20px;
     text-align: center;
+
+    box-shadow: 0 20px 40px rgba(0,0,0, .15);
   }
   
   h1, h2 {
