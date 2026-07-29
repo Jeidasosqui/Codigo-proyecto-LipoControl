@@ -14,8 +14,19 @@
   <!-- FORMULARIO -->
   <div class="card">
     <h3>Registrar Datos</h3>
-    <input type="number" id="colesterol" placeholder="Colesterol">
-    <input type="number" id="trigliceridos" placeholder="Triglicéridos">
+    
+    <input type="number" id="colesterolhdl" placeholder="Colesterol hdl" oninput="colesteroltotal()">
+    <input type="number" id="colesterolldl" placeholder="Colesterol ldl" oninput="colesteroltotal()">
+    <input type="number" id="colesterolvldl" placeholder="Colesterol vldl" oninput="colesteroltotal()">
+    <p> colesterol total: <span id="colesteroltotal"></span></p>
+
+    <input type="number" id="trigliceridos" placeholder="triglicéridos">
+
+    <select id="tipomedicion">
+    <option value="mg/dl">mg/dl</option>
+    <option value="mmol/L">mmol/L</option>
+    </select>
+
     <button onclick="guardarDatos()">Guardar</button>
   </div>
 
