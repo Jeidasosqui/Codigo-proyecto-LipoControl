@@ -1,13 +1,17 @@
 body {
-    font-family: Poppins, sans-serif;
-    background: linear-gradient(135deg, #4595eb, #00c6ff);
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f4c81,#1976d2,#42a5f5);
+    min-height: 100vh;
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #333;
   }
   
   .container {
     width: 380px;
-    margin: 70px auto;
+    margin: 0;
     background: rgba(255, 255, 255, 0.95);
     padding: 40px;
     border-radius: 20px;
@@ -99,4 +103,11 @@ body {
 #bienvenida,
 .card h3 {
   text-align: center;
+}
+
+.subtitulo{
+    color:#666;
+    font-size:15px;
+    margin-top:-10px;
+    margin-bottom:30px;
 }
