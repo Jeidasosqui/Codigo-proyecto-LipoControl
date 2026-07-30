@@ -52,7 +52,6 @@ input:focus{
     box-shadow:0 0 0 4px rgba(32, 113, 194, 0.15);
 
 }
-  }
   
   button, .btn {
     display: block;
@@ -154,5 +153,4 @@ label{
     font-weight:600;
 
     color:#2d3748;
-}
 }
