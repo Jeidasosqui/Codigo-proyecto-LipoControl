@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Paciente</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="../css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -14,8 +14,19 @@
   <!-- FORMULARIO -->
   <div class="card">
     <h3>Registrar Datos</h3>
-    <input type="number" id="colesterol" placeholder="Colesterol">
+
+    <input type="number" id="colesterolhdl" placeholder="Colesterol hdl" oninput="calcularcolesteroltotal()">
+    <input type="number" id="colesterolldl" placeholder="Colesterol ldl" oninput="calcularcolesteroltotal()">
+    <input type="number" id="colesterolvldl" placeholder="Colesterol vldl" oninput="calcularcolesteroltotal()">
+    <p> colesterol total: <span id="colesteroltotal">0</span></p>
+
     <input type="number" id="trigliceridos" placeholder="Triglicéridos">
+
+    <select id="tipomedicion">
+      <option value="ayunas">En ayunas</option>
+      <option value="no_ayunas">Sin ayunas</option>
+    </select>
+
     <button onclick="guardarDatos()">Guardar</button>
   </div>
 
@@ -40,8 +51,8 @@ border:2px solid red;
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="js/supabase.js"></script>
-<script src="js/script.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/script.js"></script>
 
 </body>
 </html>

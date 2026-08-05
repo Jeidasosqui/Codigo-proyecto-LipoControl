@@ -1,111 +1,179 @@
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0f4c81,#1976d2,#42a5f5);
+/* =========================
+ESTILOS GENERALES
+========================= */
+
+body  {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #68a9deb4, #1c69d5);
+    margin: 0px;
+    color: #222;
     min-height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #0f4c81;
-  }
-  
-  .container {
-    width: 380px;
-    margin: 0;
-    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+}
+
+
+/* =========================
+CONTENEDOR PRINCIPAL
+========================= */
+
+.container {
+    width: 90%;
+    max-width: 540px;
+    margin: 40px auto;
+    background: white;
     padding: 40px;
-    border-radius: 20px;
+    border-radius: 15px;
     text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
 
-    box-shadow: 0 20px 40px rgba(0,0,0, .15);
-  }
-  
-  h1, h2 {
+
+/* =========================
+TÍTULOS
+========================= */
+
+h1, h2 {
     margin-bottom: 20px;
-  }
-  
-  input {
-    width:100%;
-    padding:14px 16px;
-    margin:12px 0;
-
-    border:1px solid #d9e2ec;
-    border-radius:12px;
-
-    background:#f8fafc;
-
-    font-size:15px;
-
-    outline:none;
-
-    box-sizing:border-box;
-
-    transition:all .3s ease;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
-input:focus{
 
-    border-color:#1976d2;
+/* =========================
+INPUTS Y FORMULARIOS
+========================= */
 
-    background:white;
-
-    box-shadow:0 0 0 4px rgba(32, 113, 194, 0.15);
-
+input {
+    width: 98%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 25px;
+    border: 1px solid #d0d0d2;
 }
-  
-  button, .btn {
+
+
+input:focus {
+    outline: none;
+    border-color: rgba(33, 80, 131, 0.3);
+    box-shadow: 0 0 8px rgba(54, 138, 227, 0.3);
+    transition: 0.2s;
+}
+
+
+/* =========================
+BOTONES
+========================= */
+
+button, .btn {
     display: block;
     width: 100%;
     padding: 10px;
-    background: #007BFF;
+    background: hsl(211, 77%, 60%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     margin-top: 10px;
     text-decoration: none;
     cursor: pointer;
-  }
-  
-  button:hover, .btn:hover {
+    transition: all 0.3s ease;
+}
+
+button:hover, 
+.btn:hover {
     background: #0056b3;
-  }
-  
-  .dashboard {
+    color: white;
+    transform: scale(1.03);
+    filter: brightness(95%);
+}
+
+
+/* =========================
+DASHBOARD
+========================= */
+
+.dashboard {
     padding: 20px;
-  }
-  
-  .card {
+    max-width: 1200px;
+    margin:auto;
+}
+
+
+/* =========================
+TARJETAS / CARDS
+========================= */
+
+.card {
     background: white;
     padding: 20px;
     margin: 15px 0;
     border-radius: 12px;
-  }
-  
-  a {
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+
+/* =========================
+ENLACES
+========================= */
+
+a {
     display: block;
     margin-top: 15px;
     color: #007BFF;
     text-decoration: none;
-  }
+    transition: color 0.2s ease;
+}
 
-  ul {
+a:hover {
+    color: #0056b3;
+}
+
+
+/* =========================
+LISTAS
+========================= */
+
+ul {
     list-style: none;
     padding: 0;
-  }
-  
-  li {
+}
+
+li {
     background: #f1f1f1;
     padding: 10px;
     margin: 5px 0;
     border-radius: 8px;
     font-size: 14px;
-  }
-  canvas {
+    transition: 0.2s;
+}
+
+li:hover {
+    background: #e0e0e0;
+}
+
+
+/* =========================
+GRÁFICAS / CANVAS
+========================= */
+
+canvas {
     max-width: 100%;
     margin-top: 20px;
-  }
+}
 
-  li button {
+
+/* =========================
+BOTONES DE LISTA
+========================= */
+
+li button {
     margin-left: 10px;
     background: red;
     color: white;
@@ -113,32 +181,35 @@ input:focus{
     padding: 5px 8px;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  li button:hover {
-    background: darkred;
-  }
+    transition: all 0.2s ease;
+}
 
-/* Centrar títulos */
+li button:hover {
+    background: darkred;
+    transform: scale(1.05);
+}
+
+
+/* =========================
+TÍTULOS DEL DASHBOARD
+========================= */
+
 .dashboard h2,
 #bienvenida,
 .card h3 {
-  text-align: center;
+    text-align: center;
+    letter-spacing: 1px;
+    font-weight: 600;
 }
-
 .subtitulo{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color:#346ea8;
     font-size:15px;
     font-weight: 400;
-
     letter-spacing: 0.5;
     line-height: 1.6;
-
-
     margin-top:-10px;
     margin-bottom:30px;
-
     text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
 }
 
@@ -147,10 +218,7 @@ label{
     text-align:left;
     margin-top:15px;
     margin-bottom:8px;
-
     font-size:14px;
-
     font-weight:600;
-
     color:#2d3748;
 }
