@@ -3,10 +3,8 @@ console.log("✅ loginRoutes cargado");
 const express = require("express");
 const router = express.Router();
 
-router.post("/login", (req, res) => {
-    res.json({
-        mensaje: "Ruta login funcionando"
-    });
-});
+const { login } = require("../controllers/loginController");
+
+router.post("/login", login);
 
 module.exports = router;
