@@ -5,40 +5,39 @@ const app = express();
 
 const PORT = 3000;
 
-// permite recibir datos en formato json
+// Permite recibir datos en formato JSON
 app.use(express.json());
 
+// Middleware para mostrar las peticiones recibidas
 app.use((req, res, next) => {
     console.log(req.method, req.url);
     next();
-
 });
 
-// Registrar rutas
-app.use(loginRoutes)
+// Registrar las rutas de login, usuarios y registros
+app.use(loginRoutes);
 
+// Endpoint de prueba
 app.post("/prueba", (req, res) => {
     res.json({
         ok: true
     });
 });
 
+// Ruta principal
 app.get("/", (req, res) => {
     res.send("API de LipoControl en funcionamiento");
 });
 
-// Endpoint de prueba
+// Endpoint de saludo
 app.get("/saludo", (req, res) => {
-    res.json ({
-        mensaje: "Bienvenido a la Api de Lipocontrol",
+    res.json({
+        mensaje: "Bienvenido a la API de LipoControl",
         estado: "Funcionando perfectamente"
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
-});
-
+// Endpoint para registrar paciente de prueba
 app.post("/paciente", (req, res) => {
 
     const datos = req.body;
@@ -48,4 +47,9 @@ app.post("/paciente", (req, res) => {
         datos: datos
     });
 
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
