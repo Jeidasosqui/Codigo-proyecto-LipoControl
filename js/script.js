@@ -50,16 +50,10 @@ async function registrarUsuario(e) {
     return;
   }
 
-  const { data, error } = await supabaseClient
-    .from("usuarios")
-    .insert([{ nombre, correo, password, tipo }]);
+  const { data, error } = await apiRegistrarUsuario({ nombre, correo, password, tipo });
+
   if (error) {
-    console.error(error);
-    if (error.code === "23505") { 
-      alert("Ese correo ya está registrado");
-    } else { 
-      alert("Error registrando usuario");
-    }
+    alert(error);
     return;
   }
 
@@ -79,12 +73,8 @@ async function login(e) {
     .querySelector("input[type='password']")
     .value.trim();
 
-  const { data, error } = await supabaseClient
-    .from("usuarios")
-    .select("*")
-    .eq("correo", correo)
-    .eq("password", password)
-    .single();
+  const { data, error } = await apiLogin(correo, password);
+
 
   console.log("resultado:", data, error);
 
@@ -92,6 +82,7 @@ async function login(e) {
     alert("Correo o contraseña incorrectos");
     return;
   }
+
 
   // GUARDAR SESIÓN
   localStorage.setItem("usuarioActivo", JSON.stringify(data));
