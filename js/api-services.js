@@ -6,17 +6,24 @@
 // ============================================
 
 async function apiLogin(correo, password) {
-  const { data, error } = await supabaseClient
-    .from("usuarios")
-    .select("*")
-    .eq("correo", correo.trim().toLowerCase())
-    .eq("password", password.trim())
-    .single();
+  const body = {
+    correo: correo.trim().toLowerCase(),
+    password: password.trim()
+  };
 
-  if (error || !data) {
-    return { data: null, error: "Correo o contraseña incorrectos" };
+  const response = await fetch("http://localhost:3000/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const resultado = await response.json();
+
+  if (resultado.ok) {
+    return { data: resultado.usuario, error: null };
+  } else {
+    return { data: null, error: resultado.mensaje };
   }
-  return { data, error: null };
 }
 
 async function apiRegistrarUsuario({ nombre, correo, password, tipo }) {
@@ -24,17 +31,26 @@ async function apiRegistrarUsuario({ nombre, correo, password, tipo }) {
     return { data: null, error: "Tipo de usuario no definido" };
   }
 
-  const { data, error } = await supabaseClient
-    .from("usuarios")
-    .insert([{ nombre, correo: correo.trim().toLowerCase(), password: password.trim(), tipo }]);
+  const body = {
+    nombre: nombre,
+    correo: correo.trim().toLowerCase(),
+    password: password.trim(),
+    tipo: tipo
+  };
 
-  if (error) {
-    const mensaje = error.message.includes("duplicado")
-      ? "Ese correo ya está registrado"
-      : "Error registrando usuario";
-    return { data: null, error: mensaje };
+  const response = await fetch("http://localhost:3000/usuarios", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const resultado = await response.json();
+
+  if (resultado.ok) {
+    return { data: resultado.usuario, error: null };
+  } else {
+    return { data: null, error: resultado.mensaje };
   }
-  return { data, error: null };
 }
 
 async function apiGuardarDatos(correoUsuario, colesterol, trigliceridos) {

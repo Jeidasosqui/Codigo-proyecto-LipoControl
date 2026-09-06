@@ -34,6 +34,7 @@ window.onload = function () {
   }
 };
 
+
 // ====== REGISTRAR USUARIO ======
 async function registrarUsuario(e) {
   e.preventDefault();
@@ -62,33 +63,30 @@ async function registrarUsuario(e) {
 }
 
 // ====== LOGIN ======
-async function login(e) {
-  e.preventDefault();
+async function login(event) {
+  event.preventDefault();
 
-  const correo = document
-    .querySelector("input[type='email']")
-    .value.trim().toLowerCase();
+  const correo = document.querySelector("input[type='email']").value;
+  const password = document.querySelector("input[type='password']").value;
 
-  const password = document
-    .querySelector("input[type='password']")
-    .value.trim();
+  if (!correo || !password) {
+    alert("Correo y contraseña son obligatorios");
+    return;
+  }
 
   const { data, error } = await apiLogin(correo, password);
 
-
-  console.log("resultado:", data, error);
-
-  if (error || !data) {
-    alert("Correo o contraseña incorrectos");
+  if (error) {
+    alert(error);
     return;
   }
 
 
-  // GUARDAR SESIÓN
-  localStorage.setItem("usuarioActivo", JSON.stringify(data));
+  //====== GUARDAR SESIÓN ======
 
-  // REDIRIGIR SEGÚN ROL
-  if (data.tipo === "paciente") {
+localStorage.setItem("usuarioActivo", JSON.stringify(data));
+
+  if( data.tipo === "paciente") {
     window.location.href = "dashboard-paciente.html";
   } else {
     window.location.href = "dashboard-medico.html";

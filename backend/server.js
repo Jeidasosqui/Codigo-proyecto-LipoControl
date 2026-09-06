@@ -1,11 +1,17 @@
 const express = require("express");
+const cors = require("cors");
 const loginRoutes = require("./routes/loginRoutes");
 
 const app = express();
-
 const PORT = 3000;
 
-// Permite recibir datos en formato JSON
+// ← CORS PRIMERO
+app.use(cors({
+  origin: ["http://localhost:5500", "http://localhost:3000", "http://127.0.0.1:5500"],
+  credentials: true
+}));
+
+// ← express.json DESPUÉS
 app.use(express.json());
 
 // Middleware para mostrar las peticiones recibidas
@@ -14,39 +20,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// Registrar las rutas de login, usuarios y registros
+// Registrar las rutas
 app.use(loginRoutes);
 
-// Endpoint de prueba
-app.post("/prueba", (req, res) => {
-    res.json({
-        ok: true
-    });
-});
-
-// Ruta principal
+// Endpoints...
 app.get("/", (req, res) => {
     res.send("API de LipoControl en funcionamiento");
-});
-
-// Endpoint de saludo
-app.get("/saludo", (req, res) => {
-    res.json({
-        mensaje: "Bienvenido a la API de LipoControl",
-        estado: "Funcionando perfectamente"
-    });
-});
-
-// Endpoint para registrar paciente de prueba
-app.post("/paciente", (req, res) => {
-
-    const datos = req.body;
-
-    res.json({
-        mensaje: "Paciente registrado correctamente",
-        datos: datos
-    });
-
 });
 
 // Iniciar servidor
