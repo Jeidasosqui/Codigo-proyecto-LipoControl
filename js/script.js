@@ -335,10 +335,11 @@ async function mostrarPacientes() {
 
 // ====== HISTORIAL DE PACIENTE (médico) ======
 async function mostrarHistorialPaciente(correo) {
-  const lista = document.getElementById("historialPaciente");
-  if (!lista) return;
+  const tabla = document.getElementById("historialPaciente");
+  if (!tabla) return;
 
-  lista.innerHTML = "";
+  const tbody = tabla.querySelector("tbody");
+  tbody.innerHTML = "";
 
   const { data, error } = await supabaseClient
     .from("registros")
@@ -351,12 +352,12 @@ async function mostrarHistorialPaciente(correo) {
   }
 
   data.forEach((registro) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      Fecha: ${registro.fecha || "Sin fecha"}
-      | Colesterol: ${registro.colesterol}
-      | Triglicéridos: ${registro.trigliceridos}
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${registro.fecha || "Sin fecha"}</td>
+      <td>${registro.colesterol}</td>
+      <td>${registro.trigliceridos}</td>
     `;
-    lista.appendChild(li);
+    tbody.appendChild(tr);
   });
 }
