@@ -222,3 +222,28 @@ label{
     font-weight:600;
     color:#2d3748;
 }
+
+
+/* =========================tablas========================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: fixed;
+}
+thead {
+    background-color: #1f549f;
+    color: white;
+}
+th {
+    padding: 10px;
+    font-weight: 600;
+    border: 1px solid #ddd;
+}
+
+td {
+    padding: 10px;
+    color: #333;
+    border: 1px solid #ddd;
+}

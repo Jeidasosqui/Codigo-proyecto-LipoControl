@@ -11,19 +11,46 @@
   <h2>Panel Médico</h2>
 
   <div class="card">
-    <h3>Citas</h3>
-    <p>Gestionar citas y horarios</p>
+    <h3>gestionar Citas</h3>
+    <p onclick="toggle('formulariocitas')">
+      gestion de citas
+    </p>
+    <form id="formulariocitas"  style="display:none" onsubmit="agendarcitas(event)">
+      <label>seleccionar paciente</label>
+      <select id="paciente">
+        <option value="">--Seleccionar paciente--</option>
+    </select>
+    <label>Fecha</label>
+    <input type="date" id="fecha" required>
+    <label>Hora</label>
+    <input type="time" id="horacita" required>
+    <label>lugar</label>
+    <input type="text" id="lugarcita" required>
+    <label>Motivo</label>
+    <input type="text" id="motivocita" required>
+    <button type="submit">Agendar cita</button>
+  </form>
+    
+    <h4> Citas</h4>
+    <ul id="listaCitas">
+    </ul>
   </div> 
 
   <div class="card">
     <h3>Pacientes Registrados</h3>
-    <ul id="listaPacientes">
+    <p onclick="toggle('listaPacientes')">
+      ver pacientes registrados
+    </p>
+    <ul id="listaPacientes" style="display:none">
     </ul>
   </div>
 
 <div class="card">
   <h3>Historial del paciente</h3>
-    <table id="historialPaciente">
+  <p onclick="toggle('historialPaciente')">
+    ver historial del paciente
+  </p>
+    <table id="historialPaciente" style="display:none">
       <thead>
         <tr>
           <th>Fecha</th>
