@@ -1,10 +1,13 @@
 /* =========================
 ESTILOS GENERALES
 ========================= */
+* {
+    box-sizing: border-box;
+}
 
 body  {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #68a9deb4, #1c69d5);
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e8f3ff, #1c69d5);
     margin: 0px;
     color: #222;
     min-height: 100vh;
@@ -22,9 +25,9 @@ CONTENEDOR PRINCIPAL
     margin: 40px auto;
     background: white;
     padding: 40px;
-    border-radius: 15px;
+    border-radius: 25px;
     text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -45,19 +48,19 @@ INPUTS Y FORMULARIOS
 ========================= */
 
 input {
-    width: 98%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 25px;
-    border: 1px solid #d0d0d2;
+    width: 100%;
+padding: 12px 15px;
+margin: 10px 0;
+border-radius: 12px;
+border: 1px solid #d0d7df;
+background: #f9fbfd;
 }
 
 
 input:focus {
     outline: none;
-    border-color: rgba(33, 80, 131, 0.3);
-    box-shadow: 0 0 8px rgba(54, 138, 227, 0.3);
-    transition: 0.2s;
+border-color: #4d91dc;
+box-shadow: 0 0 0 3px rgba(77, 145, 220, 0.15);
 }
 
 
@@ -104,18 +107,13 @@ TARJETAS / CARDS
 ========================= */
 
 .card {
-    background: white;
-    padding: 20px;
-    margin: 15px 0;
-    border-radius: 12px;
-
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-
-    transition: all 0.2s ease;
+   padding: 28px;
+border-radius: 18px;
+box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
 
@@ -174,6 +172,7 @@ BOTONES DE LISTA
 ========================= */
 
 li button {
+    width: auto;
     margin-left: 10px;
     background: red;
     color: white;
@@ -246,4 +245,25 @@ td {
     padding: 10px;
     color: #333;
     border: 1px solid #ddd;
+}
+
+/* Filas con flex box*/
+
+.fila-flex {
+    display: flex;
+    gap: 20px;
+}
+
+.fila-flex > div {
+    flex: 1;
+}
+
+/*Responsive*/
+
+@media (max-width: 600px) {
+
+    .fila-flex {
+        flex-direction: column;
+    }
+
 }
