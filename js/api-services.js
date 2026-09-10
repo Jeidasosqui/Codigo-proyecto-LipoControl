@@ -11,7 +11,7 @@ async function apiLogin(correo, password) {
     password: password.trim()
   };
 
-  const response = await fetch("http://localhost:3000/login", {
+  const response = await fetch("http://localhost:3001/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
@@ -38,7 +38,7 @@ async function apiRegistrarUsuario({ nombre, correo, password, tipo }) {
     tipo: tipo
   };
 
-  const response = await fetch("http://localhost:3000/usuarios", {
+  const response = await fetch("http://localhost:3001/usuarios", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
