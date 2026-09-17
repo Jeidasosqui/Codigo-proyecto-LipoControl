@@ -107,9 +107,12 @@ TARJETAS / CARDS
 ========================= */
 
 .card {
-   padding: 28px;
+padding: 28px;
+margin: 20px 0;
+background: white;
 border-radius: 18px;
 box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
@@ -194,12 +197,31 @@ TÍTULOS DEL DASHBOARD
 ========================= */
 
 .dashboard h2,
-#bienvenida,
 .card h3 {
     text-align: center;
     letter-spacing: 1px;
     font-weight: 600;
 }
+
+.bienvenida {
+    text-align: center;
+    margin: 10px 0 5px;
+    color: #1f549f;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.bienvenida::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    margin: 8px auto 0;
+    background: #4d91dc;
+    border-radius: 10px;
+}
+
 .subtitulo{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color:#346ea8;
@@ -254,7 +276,7 @@ td {
     gap: 20px;
 }
 
-.fila-flex > div {
+.fila-flex > input {
     flex: 1;
 }
 
@@ -266,4 +288,39 @@ td {
         flex-direction: column;
     }
 
+}
+
+.resultadoColesterol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f1f7ff;
+    border-radius: 12px;
+    
+}
+
+.resultadoColesterol strong {
+    font-size: 24px;
+    color: #1f549f;
+}
+
+.select-medicion {
+    width: 100%;
+    padding: 15px 18px;
+    margin-top: 10px;
+    border: 1px solid #d0d7df;
+    border-radius: 12px;
+    background: #f9fbfd;
+    color: #2d3748;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.select-medicion:focus {
+        outline:none;
+        border-color: #4d91dc;
+        box-shadow: 0 0 0 3px rgba(77, 145, 220, 0.15);
 }

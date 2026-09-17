@@ -232,11 +232,19 @@ async function mostrarHistorial() {
 }
 
 // ====== MOSTRAR USUARIO ======
+function formatearNombre(nombre) {
+  return nombre
+        .toLowerCase()
+        .split("")
+        .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+        .join("");
+
+}
 function mostrarUsuario() {
   const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
   if (usuario) {
     const texto = document.getElementById("bienvenida");
-    if (texto) {      texto.textContent = "Bienvenido, " + usuario.nombre;
+    if (texto) {      texto.textContent = "Bienvenido, " + formatearNombre(usuario.nombre);
     }
   }
 }

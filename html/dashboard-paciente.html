@@ -7,25 +7,36 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h3 id="bienvenida"></h3>
+  <h3 id="bienvenida" class="bienvenida"></h3>
+  
 <div class="dashboard">
+
   <h2>Panel del Paciente</h2>
 
   <!-- FORMULARIO -->
   <div class="card">
+
     <h3>Registrar Datos</h3>
-<div class="fila-flex"></div>
-    <input type="number" id="colesterolhdl" placeholder="Colesterol hdl" oninput="calcularcolesteroltotal()">
-    <input type="number" id="colesterolldl" placeholder="Colesterol ldl" oninput="calcularcolesteroltotal()">
-    <input type="number" id="colesterolvldl" placeholder="Colesterol vldl" oninput="calcularcolesteroltotal()">
-</div>
-<p> colesterol total: <span id="colesteroltotal">0</span></p>
 
-    <input type="number" id="trigliceridos" placeholder="Triglicéridos">
+    <div class="fila-flex">
+          <input type="number" id="colesterolhdl" placeholder="Colesterol hdl" oninput="calcularcolesteroltotal()">
+          <input type="number" id="colesterolldl" placeholder="Colesterol ldl" oninput="calcularcolesteroltotal()">
+    </div>
 
-    <select id="tipomedicion">
-      <option value="ayunas">En ayunas</option>
-      <option value="no_ayunas">Sin ayunas</option>
+    <div class="fila-flex">
+          <input type="number" id="colesterolvldl" placeholder="Colesterol vldl" oninput="calcularcolesteroltotal()">
+          <input type="number" id="trigliceridos" placeholder="Triglicéridos">
+    </div>
+
+    <div class= "resultadoColesterol">
+          <span> Colesterol Total </span>
+          <strong id="colesteroltotal">0</strong>
+          <small>mg/dl</small>
+    </div>
+
+    <select id="tipomedicion" class="select-medicion">
+          <option value="ayunas">En ayunas</option>
+          <option value="no_ayunas">Sin ayunas</option>
     </select>
 
     <button onclick="guardarDatos()">Guardar</button>
