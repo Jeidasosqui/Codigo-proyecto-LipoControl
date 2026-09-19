@@ -71,23 +71,25 @@ BOTONES
 button, .btn {
     display: block;
     width: 100%;
-    padding: 10px;
-    background: hsl(211, 77%, 60%);
+    padding: 12px;
+    background:#1f6fd1;
     color: white;
     border: none;
     border-radius: 12px;
-    margin-top: 10px;
+    margin-top: 15px;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    font-size: 15px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 button:hover, 
 .btn:hover {
-    background: #0056b3;
+    background: #1558a6;
     color: white;
-    transform: scale(1.03);
-    filter: brightness(95%);
+    transform: translate(-2px);
+    box-shadow: 0 6px 15px rgba(31, 84, 159, 0.25);
 }
 
 
@@ -147,16 +149,21 @@ ul {
 }
 
 li {
-    background: #f1f1f1;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 8px;
+    background: #f8fafc;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 10px;
     font-size: 14px;
-    transition: 0.2s;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+   
+
 }
 
 li:hover {
-    background: #e0e0e0;
+    background: #FCFBF5;
+    transform: translateX(3px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 
@@ -167,6 +174,7 @@ GRÁFICAS / CANVAS
 canvas {
     max-width: 100%;
     margin-top: 20px;
+    padding: 10px;
 }
 
 
@@ -177,17 +185,18 @@ BOTONES DE LISTA
 li button {
     width: auto;
     margin-left: 10px;
-    background: red;
+    background:#dc3545;
     color: white;
     border: none;
-    padding: 5px 8px;
-    border-radius: 5px;
+    padding: 6px 9px;
+    border-radius: 7px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    font-size: 12px;
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
 li button:hover {
-    background: darkred;
+    background:  #b02a37;
     transform: scale(1.05);
 }
 
@@ -316,6 +325,7 @@ td {
     background: #f9fbfd;
     color: #2d3748;
     font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
 }
 
@@ -323,4 +333,24 @@ td {
         outline:none;
         border-color: #4d91dc;
         box-shadow: 0 0 0 3px rgba(77, 145, 220, 0.15);
+}
+
+#historial {
+    margin-top: 15px;
+}
+
+.btn-cerrar {
+    max width: 250px;
+    margin:25px auto;
+    background: #64748b; 
+
+
+}
+    
+
+
+
+.btn-cerrar:hover {
+    background: #475559
+
 }
