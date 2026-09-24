@@ -225,7 +225,7 @@ async function mostrarHistorial() {
       Fecha: ${dato.fecha || "Sin fecha"}
       | Colesterol: ${dato.colesterol}
       | Triglicéridos: ${dato.trigliceridos}
-      <button onclick="eliminarDato(${dato.id})">❌</button>
+      <button onclick="abrirModalEliminar(${dato.id})">❌</button>
     `;
     lista.appendChild(li);
   });
@@ -294,24 +294,88 @@ async function crearGrafica() {
 }
 
 // ====== ELIMINAR DATO ======
-async function eliminarDato(id) {
-  if (!confirm("¿Estás seguro de eliminar este registro?")) return;
+let idRegistroEliminar = null;
 
-  const { error } = await supabaseClient
-    .from("registros")
-    .delete()
-    .eq("id", id);
+function abrirModalEliminar(id) {
 
-  if (error) {
-    console.error(error);
-    alert("Error al eliminar este registro");
-    return;
-  }
+    idRegistroEliminar = id;
 
-  alert("Registro eliminado correctamente!");
-  mostrarHistorial();
-  crearGrafica();
+    document.getElementById("modalConfirmacion").style.display = "flex";
+
 }
+
+function cerrarModalEliminar() {
+
+    idRegistroEliminar = null;
+
+    document.getElementById("modalConfirmacion").style.display = "none";
+
+}
+
+async function confirmarEliminacion() {
+
+    const id = idRegistroEliminar;
+
+    cerrarModalEliminar();
+
+    if (!id) return;
+
+    const { error } = await supabaseClient
+        .from("registros")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+
+        console.error(error);
+
+        mostrarMensaje(
+            "Error",
+            "No fue posible eliminar este registro."
+        );
+
+        return;
+    }
+
+    mostrarMensaje(
+        "Registro eliminado",
+        "El registro se eliminó correctamente."
+    );
+
+    mostrarHistorial();
+    crearGrafica();
+
+    function mostrarMensaje(titulo, texto) {
+
+    document.getElementById("tituloMensaje").textContent = titulo;
+
+    document.getElementById("textoMensaje").textContent = texto;
+
+    document.getElementById("modalMensaje").style.display = "flex";
+}
+
+function cerrarModalMensaje() {
+
+    document.getElementById("modalMensaje").style.display = "none";
+}
+
+}
+
+
+// EVENTOS DE LOS BOTONES
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.getElementById("btnCancelarEliminar")
+        .addEventListener("click", cerrarModalEliminar);
+
+    document.getElementById("btnConfirmarEliminar")
+        .addEventListener("click", confirmarEliminacion);
+
+    document.getElementById("btnAceptarMensaje")
+        .addEventListener("click", cerrarModalMensaje);
+
+});
 
 // ====== MOSTRAR PACIENTES (médico) ======
 async function mostrarPacientes() {

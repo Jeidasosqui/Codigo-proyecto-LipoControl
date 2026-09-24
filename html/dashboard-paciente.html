@@ -59,5 +59,37 @@
 <script src="../js/supabase.js"></script>
 <script src="../js/script.js"></script>
 
+<!-- MODAL DE CONFIRMACIÓN -->
+<div id="modalConfirmacion" class="modal">
+    <div class="modal-contenido">
+        <h3>Elimine registro</h3>
+
+        <p>¿Estás seguro de querer eliminar este registro?</p>
+
+        <div class="modal-botones">
+            <button id="btnCancelarEliminar" class="btn-modal cancelar">
+                Cancelar
+            </button>
+
+            <button id="btnConfirmarEliminar" class="btn-modal eliminar">
+                Eliminar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE MENSAJE -->
+<div id="modalMensaje" class="modal">
+    <div class="modal-contenido">
+        <h3 id="tituloMensaje">Mensaje</h3>
+
+        <p id="textoMensaje"></p>
+
+        <button id="btnAceptarMensaje" class="btn-modal aceptar">
+            Aceptar
+        </button>
+    </div>
+</div>
+
 </body>
 </html>
