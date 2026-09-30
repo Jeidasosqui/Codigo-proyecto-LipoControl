@@ -256,45 +256,137 @@ function cerrarSesion() {
 }
 
 // ====== GRÁFICA ======
+
 let graficaActual = null;
 
 async function crearGrafica() {
-  const ctx = document.getElementById("miGrafica");
-  if (!ctx) return;
 
-  const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
-  if (!usuario) return;
+    const ctx = document.getElementById("miGrafica");
 
-  const { data, error } = await supabaseClient
+    if (!ctx) return;
+
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+
+    if (!usuario) return;
+    /* destruir grafica anterior*/
+
+    if (graficaActual) {
+    graficaActual.destroy();
+    graficaActual = null;
+}
+
+const { data, error } = await supabaseClient
     .from("registros")
     .select("*")
     .eq("usuario", usuario.correo);
 
-  if (error || !data || data.length === 0) return;
+if (error || !data || data.length === 0) return;
 
-  // Destruir gráfica anterior para evitar duplicados
-  if (graficaActual) {
-    graficaActual.destroy();
-  }
+    // Ordenar registros por fecha
+    data.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
 
-  const fechas = data.map(d => d.fecha || "Sin fecha");
-  const colesterol = data.map(d => d.colesterol);
-  const trigliceridos = data.map(d => d.trigliceridos);
+    const fechas = data.map(d => d.fecha || "Sin fecha");
+    const colesterol = data.map(d => d.colesterol);
+    const trigliceridos = data.map(d => d.trigliceridos);
 
-  graficaActual = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: fechas,
-      datasets: [
-        { label: "Colesterol", data: colesterol, borderColor: "#007BFF", tension: 0.3 },
-        { label: "Triglicéridos", data: trigliceridos, borderColor: "#FF5733", tension: 0.3 }
-      ]
-    }
-  });
+    graficaActual = new Chart(ctx, {
+
+        type: "line",
+
+        data: {
+
+            labels: fechas,
+
+            datasets: [
+
+                {
+                    label: "Colesterol",
+                    data: colesterol,
+                    borderColor: "#1f6fd1",
+                    backgroundColor: "rgba(31, 111, 209, 0.10)",
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    tension: 0.3,
+                    fill: false
+                },
+
+                {
+                    label: "Triglicéridos",
+                    data: trigliceridos,
+                    borderColor: "#e4572e",
+                    backgroundColor: "rgba(228, 87, 46, 0.10)",
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    tension: 0.3,
+                    fill: false
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    position: "top"
+                }
+
+            },
+
+            interaction: {
+
+                mode: "index",
+                intersect: false
+
+            },
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    title: {
+
+                        display: true,
+                        text: "mg/dL"
+
+                    }
+
+                },
+
+                x: {
+
+                    title: {
+
+                        display: true,
+                        text: "Fecha"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
 }
 
+
 // ====== ELIMINAR DATO ======
+
 let idRegistroEliminar = null;
+
 
 function abrirModalEliminar(id) {
 
@@ -304,6 +396,7 @@ function abrirModalEliminar(id) {
 
 }
 
+
 function cerrarModalEliminar() {
 
     idRegistroEliminar = null;
@@ -311,6 +404,7 @@ function cerrarModalEliminar() {
     document.getElementById("modalConfirmacion").style.display = "none";
 
 }
+
 
 async function confirmarEliminacion() {
 
@@ -335,6 +429,7 @@ async function confirmarEliminacion() {
         );
 
         return;
+
     }
 
     mostrarMensaje(
@@ -342,38 +437,74 @@ async function confirmarEliminacion() {
         "El registro se eliminó correctamente."
     );
 
-    mostrarHistorial();
-    crearGrafica();
+    await mostrarHistorial();
+    await crearGrafica();
 
-    function mostrarMensaje(titulo, texto) {
+}
+
+
+// ====== MODAL DE MENSAJE ======
+
+function mostrarMensaje(titulo, texto) {
 
     document.getElementById("tituloMensaje").textContent = titulo;
 
     document.getElementById("textoMensaje").textContent = texto;
 
     document.getElementById("modalMensaje").style.display = "flex";
+
 }
+
 
 function cerrarModalMensaje() {
 
     document.getElementById("modalMensaje").style.display = "none";
-}
 
 }
 
 
-// EVENTOS DE LOS BOTONES
+// ====== EVENTOS DE LOS BOTONES ======
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    document.getElementById("btnCancelarEliminar")
-        .addEventListener("click", cerrarModalEliminar);
+    const btnCancelarEliminar =
+        document.getElementById("btnCancelarEliminar");
 
-    document.getElementById("btnConfirmarEliminar")
-        .addEventListener("click", confirmarEliminacion);
+    const btnConfirmarEliminar =
+        document.getElementById("btnConfirmarEliminar");
 
-    document.getElementById("btnAceptarMensaje")
-        .addEventListener("click", cerrarModalMensaje);
+    const btnAceptarMensaje =
+        document.getElementById("btnAceptarMensaje");
+
+
+    if (btnCancelarEliminar) {
+
+        btnCancelarEliminar.addEventListener(
+            "click",
+            cerrarModalEliminar
+        );
+
+    }
+
+
+    if (btnConfirmarEliminar) {
+
+        btnConfirmarEliminar.addEventListener(
+            "click",
+            confirmarEliminacion
+        );
+
+    }
+
+
+    if (btnAceptarMensaje) {
+
+        btnAceptarMensaje.addEventListener(
+            "click",
+            cerrarModalMensaje
+        );
+
+    }
 
 });
 
@@ -442,4 +573,4 @@ function toggle(elementId) {
   } else {
     element.style.display = "none";
   }
-}
+} 
