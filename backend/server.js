@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const loginRoutes = require("./routes/loginRoutes");
@@ -7,8 +8,14 @@ const PORT = 3001;
 
 // ← CORS PRIMERO
 app.use(cors({
-  origin: ["http://localhost:5500", "http://localhost:3001", "http://127.0.0.1:5500"],
-  credentials: true
+    origin: [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:5501",
+    "http://127.0.0.1:5501",
+    "http://localhost:3001"
+    ],
+    credentials: true
 }));
 
 // ← express.json DESPUÉS
