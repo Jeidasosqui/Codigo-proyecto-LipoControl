@@ -24,6 +24,14 @@ async function login(req, res) {
             .eq("correo", correo)
             .eq("password", password)
             .single();
+        
+
+    console.log("Login diagnóstico:", {
+    correoRecibido: correo.trim().toLowerCase(),
+    encontroUsuario: Boolean(data),
+    errorCodigo: error?.code,
+    errorMensaje: error?.message
+});
 
         // Verificar si hubo error o no se encontró el usuario
         if (error || !data) {

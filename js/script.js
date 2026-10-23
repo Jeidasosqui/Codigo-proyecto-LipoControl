@@ -93,64 +93,114 @@ localStorage.setItem("usuarioActivo", JSON.stringify(data));
   }
 }
 
-// ====== GUARDAR DATOS ======
+
+/* ====== GUARDAR DATOS ====== */
 async function guardarDatos() {
-  const hdl = document.getElementById("colesterolhdl").value;
-  const ldl = document.getElementById("colesterolldl").value;
-  const vldl = document.getElementById("colesterolvldl").value;
-  const trigliceridos = document.getElementById("trigliceridos").value;
-  const tipomedicion = document.getElementById("tipomedicion").value;
+    const hdl = document.getElementById("colesterolhdl").value.trim();
+    const ldl = document.getElementById("colesterolldl").value.trim();
+    const vldl = document.getElementById("colesterolvldl").value.trim();
+    const trigliceridos = document.getElementById("trigliceridos").value.trim();
+    const tipomedicion = document.getElementById("tipomedicion").value;
 
-  if (!hdl || !ldl || !vldl || !trigliceridos || !tipomedicion) {
-    alert("Completa todos los campos");
-    return;
-  }
+    // 1. Validar campos vacíos
+    if (!hdl || !ldl || !vldl || !trigliceridos || !tipomedicion) {
+        alert("Completa todos los campos.");
+        return;
+    }
 
-  const total = Number (hdl) + Number(ldl) + Number(vldl);
+    // 2. Convertir los valores a números
+    const valores = [hdl, ldl, vldl, trigliceridos].map(Number);
 
+    // 3. Validar que sean números positivos y finitos
+    if (!valores.every(valor => Number.isFinite(valor) && valor > 0)) {
+        alert("Ingresa valores numéricos mayores que cero en todos los campos.");
+        return;
+    }
 
-  const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+    // 4. Evitar valores excesivamente altos por errores de digitación
+    if (valores.some(valor => valor > 1000)) {
+        alert("Revisa los valores ingresados. Alguno supera 1000 mg/dL.");
+        return;
+    }
 
-  const { error } = await supabaseClient
-    .from("registros")
-    .insert([{
-      usuario: usuario.correo,
-      colesterol: total,
-      colesterol_hdl: Number(hdl),
-      colesterol_ldl: Number(ldl),
-      colesterol_vldl: Number(vldl),
-      tipo_medicion: tipomedicion,
-      trigliceridos: Number(trigliceridos),
-      fecha: new Date().toISOString().split("T")[0]
-    }]);
+    // 5. Verificar que exista una sesión activa
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
 
-  if (error) {
-    console.error(error);
-    alert("Error  al guardando datos");
-    return;
-  }
+    if (!usuario || !usuario.correo) {
+        alert("Tu sesión no está activa. Inicia sesión nuevamente.");
+        window.location.href = "index.html";
+        return;
+    }
 
-  alert("Datos guardados correctamente");
+    // 6. Calcular el colesterol total
+    const total = Number(hdl) + Number(ldl) + Number(vldl);
 
-  
-  document.getElementById("colesterolhdl").value = "";
-  document.getElementById("colesterolldl").value = "";
-  document.getElementById("colesterolvldl").value = "";
-  document.getElementById("trigliceridos").value = "";
-  document.getElementById("colesteroltotal").textContent = "0";
-  mostrarHistorial();
-  crearGrafica();
+    // 7. Guardar el registro en Supabase
+    const { error } = await supabaseClient
+        .from("registros")
+        .insert([{
+            usuario: usuario.correo,
+            colesterol: total,
+            colesterol_hdl: Number(hdl),
+            colesterol_ldl: Number(ldl),
+            colesterol_vldl: Number(vldl),
+            tipo_medicion: tipomedicion,
+            trigliceridos: Number(trigliceridos),
+            fecha: new Date().toISOString().split("T")[0]
+        }]);
+
+    // 8. Comprobar si hubo un error al guardar
+    if (error) {
+        console.error("Error al guardar el registro:", error);
+        alert("No se pudieron guardar los datos. Inténtalo nuevamente.");
+        return;
+    }
+
+    // 9. Confirmar y limpiar el formulario
+    alert("Datos guardados correctamente.");
+
+    document.getElementById("colesterolhdl").value = "";
+    document.getElementById("colesterolldl").value = "";
+    document.getElementById("colesterolvldl").value = "";
+    document.getElementById("trigliceridos").value = "";
+    document.getElementById("colesteroltotal").textContent = "0";
+
+    // 10. Actualizar historial y gráfica
+    await mostrarHistorial();
+    await crearGrafica();
 }
-//CALCULAR COLESTEROL TOTAL//
-  function calcularcolesteroltotal() {
-  const hdl = parseFloat(document.getElementById("colesterolhdl").value) || 0;
-  const ldl = parseFloat(document.getElementById("colesterolldl").value) || 0;
-  const vldl = parseFloat(document.getElementById("colesterolvldl").value) || 0;
 
-  const total = hdl + ldl + vldl;
 
-  document.getElementById("colesteroltotal").textContent = total;
-  }
+/* ====== CALCULAR COLESTEROL TOTAL ====== */
+function calcularcolesteroltotal() {
+    const campoHdl = document.getElementById("colesterolhdl").value.trim();
+    const campoLdl = document.getElementById("colesterolldl").value.trim();
+    const campoVldl = document.getElementById("colesterolvldl").value.trim();
+
+    const resultado = document.getElementById("colesteroltotal");
+
+    // Si falta algún dato, no mostramos un total parcial
+    if (campoHdl === "" || campoLdl === "" || campoVldl === "") {
+        resultado.textContent = "—";
+        return;
+    }
+
+    const hdl = Number(campoHdl);
+    const ldl = Number(campoLdl);
+    const vldl = Number(campoVldl);
+
+    // Validar que los valores sean números válidos y positivos
+    const valores = [hdl, ldl, vldl];
+
+    if (!valores.every(valor => Number.isFinite(valor) && valor > 0 && valor <= 1000)) {
+        resultado.textContent = "—";
+        return;
+    }
+
+    // Calcular y mostrar el total
+    const total = hdl + ldl + vldl;
+    resultado.textContent = total;
+}
 
 
 //=======EVALUAR NVELES DE COLESTEROL Y TRIGLICÉRIDOS ======
@@ -363,16 +413,33 @@ if (error || !data || data.length === 0) return;
 
                 },
 
+                
+
                 x: {
-
-                    title: {
-
-                        display: true,
-                        text: "Fecha"
-
+                offset: false,
+                ticks: {
+                    padding: 2,
+                    color: "#1f549f",
+                    font: {
+                        weight: "bold",
+                        size: 12
                     }
-
+                },
+                title: {
+                    display: true,
+                    text: "Fecha",
+                    align: "center",
+                    padding: 0,
+                    color: "#1f549f",
+                    font: {
+                        weight: "bold",
+                        size: 14
+                    }
                 }
+            }
+
+
+                
 
             }
 

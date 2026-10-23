@@ -57,11 +57,18 @@ background: #f9fbfd;
 }
 
 
+
+input {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
 input:focus {
     outline: none;
-border-color: #4d91dc;
-box-shadow: 0 0 0 3px rgba(77, 145, 220, 0.15);
+    border-color: #1f6fd1;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(31, 111, 209, 0.15);
 }
+
 
 
 /* =========================
@@ -149,7 +156,13 @@ ul {
     padding: 0;
 }
 
-li {
+#historial li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+
     background: #f8fafc;
     padding: 12px 15px;
     margin: 8px 0;
