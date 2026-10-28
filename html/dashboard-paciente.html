@@ -13,34 +13,72 @@
 
   <h2>Panel del Paciente</h2>
 
-  <!-- FORMULARIO -->
-  <div class="card">
+  
+<!-- FORMULARIO -->
+<div class="card">
 
-    <h3>Registrar Datos</h3>
+    <h3>Registrar resultados del laboratorio</h3>
 
     <div class="fila-flex">
-          <input type="number" id="colesterolhdl" placeholder="Colesterol hdl" oninput="calcularcolesteroltotal()">
-          <input type="number" id="colesterolldl" placeholder="Colesterol ldl" oninput="calcularcolesteroltotal()">
+        <input
+            type="number"
+            id="colesteroltotal"
+            placeholder="Colesterol total (mg/dL)"
+            min="1"
+            max="1000"
+            step="any"
+        >
+
+        <input
+            type="number"
+            id="trigliceridos"
+            placeholder="Triglicéridos (mg/dL)"
+            min="1"
+            max="1000"
+            step="any"
+        >
     </div>
 
     <div class="fila-flex">
-          <input type="number" id="colesterolvldl" placeholder="Colesterol vldl" oninput="calcularcolesteroltotal()">
-          <input type="number" id="trigliceridos" placeholder="Triglicéridos">
+        <input
+            type="number"
+            id="colesterolhdl"
+            placeholder="Colesterol HDL (mg/dL)"
+            min="1"
+            max="1000"
+            step="any"
+        >
+
+        <input
+            type="number"
+            id="colesterolldl"
+            placeholder="Colesterol LDL (mg/dL)"
+            min="1"
+            max="1000"
+            step="any"
+        >
     </div>
 
-    <div class= "resultadoColesterol">
-          <span> Colesterol Total </span>
-          <strong id="colesteroltotal">0</strong>
-          <small>mg/dl</small>
+    <div class="fila-flex">
+        <input
+            type="number"
+            id="colesterolvldl"
+            placeholder="Colesterol VLDL (mg/dL, opcional)"
+            min="1"
+            max="1000"
+            step="any"
+        >
     </div>
 
     <select id="tipomedicion" class="select-medicion">
-          <option value="ayunas">En ayunas</option>
-          <option value="no_ayunas">Sin ayunas</option>
+        <option value="ayunas">En ayunas</option>
+        <option value="no_ayunas">Sin ayunas</option>
     </select>
 
     <button onclick="guardarDatos()">Guardar</button>
-  </div>
+
+</div>
+
 
   <!-- HISTORIAL -->
   <div class="card">

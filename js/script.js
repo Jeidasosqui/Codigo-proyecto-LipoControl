@@ -94,36 +94,45 @@ localStorage.setItem("usuarioActivo", JSON.stringify(data));
 }
 
 
-/* ====== GUARDAR DATOS ====== */
+
+/* ====== GUARDAR DATOS DEL PERFIL LIPIDICO ====== */
 async function guardarDatos() {
+    // 1. Obtener los valores del formulario
+    const colesterol = document.getElementById("colesteroltotal").value.trim();
     const hdl = document.getElementById("colesterolhdl").value.trim();
     const ldl = document.getElementById("colesterolldl").value.trim();
     const vldl = document.getElementById("colesterolvldl").value.trim();
     const trigliceridos = document.getElementById("trigliceridos").value.trim();
     const tipomedicion = document.getElementById("tipomedicion").value;
 
-    // 1. Validar campos vacíos
-    if (!hdl || !ldl || !vldl || !trigliceridos || !tipomedicion) {
-        alert("Completa todos los campos.");
+    // 2. Comprobar los campos obligatorios
+    if (!colesterol || !hdl || !ldl || !trigliceridos || !tipomedicion) {
+        alert("Completa los campos obligatorios del perfil lipídico.");
         return;
     }
 
-    // 2. Convertir los valores a números
-    const valores = [hdl, ldl, vldl, trigliceridos].map(Number);
+    // 3. Convertir los valores a números
+    const valores = {
+        colesterol: Number(colesterol),
+        hdl: Number(hdl),
+        ldl: Number(ldl),
+        trigliceridos: Number(trigliceridos)
+    };
 
-    // 3. Validar que sean números positivos y finitos
-    if (!valores.every(valor => Number.isFinite(valor) && valor > 0)) {
-        alert("Ingresa valores numéricos mayores que cero en todos los campos.");
+    // VLDL es opcional si el laboratorio no lo informa
+    if (vldl !== "") {
+        valores.vldl = Number(vldl);
+    }
+
+    // 4. Validar que sean números positivos y finitos
+    if (Object.values(valores).some(
+        valor => !Number.isFinite(valor) || valor <= 0 || valor > 1000
+    )) {
+        alert("Revisa los resultados: deben ser números mayores que cero y no superar 1000 mg/dL.");
         return;
     }
 
-    // 4. Evitar valores excesivamente altos por errores de digitación
-    if (valores.some(valor => valor > 1000)) {
-        alert("Revisa los valores ingresados. Alguno supera 1000 mg/dL.");
-        return;
-    }
-
-    // 5. Verificar que exista una sesión activa
+    // 5. Comprobar la sesión del usuario
     const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
 
     if (!usuario || !usuario.correo) {
@@ -132,75 +141,42 @@ async function guardarDatos() {
         return;
     }
 
-    // 6. Calcular el colesterol total
-    const total = Number(hdl) + Number(ldl) + Number(vldl);
-
-    // 7. Guardar el registro en Supabase
+    // 6. Guardar los resultados por separado en Supabase
     const { error } = await supabaseClient
         .from("registros")
         .insert([{
             usuario: usuario.correo,
-            colesterol: total,
-            colesterol_hdl: Number(hdl),
-            colesterol_ldl: Number(ldl),
-            colesterol_vldl: Number(vldl),
+            colesterol: valores.colesterol,
+            colesterol_hdl: valores.hdl,
+            colesterol_ldl: valores.ldl,
+            colesterol_vldl: valores.vldl ?? null,
             tipo_medicion: tipomedicion,
-            trigliceridos: Number(trigliceridos),
+            trigliceridos: valores.trigliceridos,
             fecha: new Date().toISOString().split("T")[0]
         }]);
 
-    // 8. Comprobar si hubo un error al guardar
+    // 7. Mostrar errores si Supabase no guarda el registro
     if (error) {
-        console.error("Error al guardar el registro:", error);
-        alert("No se pudieron guardar los datos. Inténtalo nuevamente.");
+        console.error("Error al guardar el perfil lipídico:", error);
+        alert("No se pudieron guardar los resultados. Inténtalo nuevamente.");
         return;
     }
 
-    // 9. Confirmar y limpiar el formulario
-    alert("Datos guardados correctamente.");
+    // 8. Confirmar y limpiar el formulario
+    alert("Perfil lipídico guardado correctamente.");
 
+    document.getElementById("colesteroltotal").value = "";
     document.getElementById("colesterolhdl").value = "";
     document.getElementById("colesterolldl").value = "";
     document.getElementById("colesterolvldl").value = "";
     document.getElementById("trigliceridos").value = "";
-    document.getElementById("colesteroltotal").textContent = "0";
 
-    // 10. Actualizar historial y gráfica
+    // 9. Actualizar historial y gráfica
     await mostrarHistorial();
     await crearGrafica();
 }
 
 
-/* ====== CALCULAR COLESTEROL TOTAL ====== */
-function calcularcolesteroltotal() {
-    const campoHdl = document.getElementById("colesterolhdl").value.trim();
-    const campoLdl = document.getElementById("colesterolldl").value.trim();
-    const campoVldl = document.getElementById("colesterolvldl").value.trim();
-
-    const resultado = document.getElementById("colesteroltotal");
-
-    // Si falta algún dato, no mostramos un total parcial
-    if (campoHdl === "" || campoLdl === "" || campoVldl === "") {
-        resultado.textContent = "—";
-        return;
-    }
-
-    const hdl = Number(campoHdl);
-    const ldl = Number(campoLdl);
-    const vldl = Number(campoVldl);
-
-    // Validar que los valores sean números válidos y positivos
-    const valores = [hdl, ldl, vldl];
-
-    if (!valores.every(valor => Number.isFinite(valor) && valor > 0 && valor <= 1000)) {
-        resultado.textContent = "—";
-        return;
-    }
-
-    // Calcular y mostrar el total
-    const total = hdl + ldl + vldl;
-    resultado.textContent = total;
-}
 
 
 //=======EVALUAR NVELES DE COLESTEROL Y TRIGLICÉRIDOS ======
@@ -249,37 +225,53 @@ else {
 }
 }
 
-//=======HISTORIAL ======
+
+/* ====== HISTORIAL ====== */
 async function mostrarHistorial() {
-  const lista = document.getElementById("historial");
-  if (!lista) return;
+    const lista = document.getElementById("historial");
+    if (!lista) return;
 
-  lista.innerHTML = "";
+    lista.innerHTML = "";
 
-  const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
-  if (!usuario) return;
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+    if (!usuario || !usuario.correo) return;
 
-  const { data, error } = await supabaseClient
-    .from("registros")
-    .select("*")
-    .eq("usuario", usuario.correo);
+    const { data, error } = await supabaseClient
+        .from("registros")
+        .select("*")
+        .eq("usuario", usuario.correo)
+        .order("fecha", { ascending: false });
 
-  if (error) {
-    console.error(error);
-    return;
-  }
+    if (error) {
+        console.error("Error al consultar el historial:", error);
+        lista.textContent = "No se pudo cargar el historial.";
+        return;
+    }
 
-  data.forEach((dato) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      Fecha: ${dato.fecha || "Sin fecha"}
-      | Colesterol: ${dato.colesterol}
-      | Triglicéridos: ${dato.trigliceridos}
-      <button onclick="abrirModalEliminar(${dato.id})">❌</button>
-    `;
-    lista.appendChild(li);
-  });
+    if (!data || data.length === 0) {
+        lista.textContent = "Todavía no tienes mediciones registradas.";
+        return;
+    }
+
+    data.forEach((dato) => {
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            <div>
+                <strong>Fecha:</strong> ${dato.fecha || "Sin fecha"}<br>
+                <strong>Colesterol total:</strong> ${dato.colesterol ?? "No registrado"} mg/dL<br>
+                <strong>HDL:</strong> ${dato.colesterol_hdl ?? "No registrado"} mg/dL<br>
+                <strong>LDL:</strong> ${dato.colesterol_ldl ?? "No registrado"} mg/dL<br>
+                <strong>VLDL:</strong> ${dato.colesterol_vldl ?? "No registrado"} mg/dL<br>
+                <strong>Triglicéridos:</strong> ${dato.trigliceridos ?? "No registrados"} mg/dL
+            </div>
+            <button onclick="abrirModalEliminar(${Number(dato.id)})">❌</button>
+        `;
+
+        lista.appendChild(li);
+    });
 }
+
 
 // ====== MOSTRAR USUARIO ======
 function formatearNombre(nombre) {
@@ -593,43 +585,88 @@ async function mostrarPacientes() {
   }
 
   data.forEach((paciente) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <button onclick="mostrarHistorialPaciente('${paciente.correo}')">
-        ${paciente.nombre}
-      </button>
-    `;
-    lista.appendChild(li);
+    
+const li = document.createElement("li");
+
+const boton = document.createElement("button");
+boton.textContent = paciente.nombre;
+boton.dataset.correo = paciente.correo;
+
+boton.addEventListener("click", () => {
+    mostrarHistorialPaciente(paciente.correo);
+});
+
+li.appendChild(boton);
+lista.appendChild(li);
+
   });
 }
 
-// ====== HISTORIAL DE PACIENTE (médico) ======
+
+/* ====== HISTORIAL DE PACIENTE (médico) ====== */
 async function mostrarHistorialPaciente(correo) {
-  const tabla = document.getElementById("historialPaciente");
-  if (!tabla) return;
+    const tabla = document.getElementById("historialPaciente");
 
-  const tbody = tabla.querySelector("tbody");
-  tbody.innerHTML = "";
+    if (!tabla) return;
 
-  const { data, error } = await supabaseClient
-    .from("registros")
-    .select("*")
-    .eq("usuario", correo);
+    // Resaltar el paciente seleccionado
+document.querySelectorAll("#listaPacientes li button").forEach((boton) => {
+    const correoBoton = boton.dataset.correo;
 
-  if (error) {
-    console.error(error);
-    return;
-  }
+    boton.classList.toggle(
+        "paciente-seleccionado",
+        correoBoton === correo
+    );
+});
 
-  data.forEach((registro) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${registro.fecha || "Sin fecha"}</td>
-      <td>${registro.colesterol}</td>
-      <td>${registro.trigliceridos}</td>
-    `;
-    tbody.appendChild(tr);
-  });
+    const tbody = tabla.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    const { data, error } = await supabaseClient
+        .from("registros")
+        .select("*")
+        .eq("usuario", correo)
+        .order("fecha", { ascending: false });
+
+    if (error) {
+        console.error("Error al consultar el historial del paciente:", error);
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">No se pudo cargar el historial.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">Este paciente no tiene registros.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    data.forEach((registro) => {
+        const tr = document.createElement("tr");
+
+        const valores = [
+            registro.fecha || "Sin fecha",
+            registro.colesterol ?? "No registrado",
+            registro.colesterol_hdl ?? "No registrado",
+            registro.colesterol_ldl ?? "No registrado",
+            registro.colesterol_vldl ?? "No registrado",
+            registro.trigliceridos ?? "No registrados"
+        ];
+
+        valores.forEach((valor) => {
+            const td = document.createElement("td");
+            td.textContent = valor;
+            tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+    });
 }
 
 // ====== TOGGLE(Mostrar/Ocultar) ======

@@ -482,3 +482,243 @@ td {
         transform: translateY(0) scale(1);
     }
 }
+
+
+
+/* ==========================================
+   LIPOCONTROL - DISEÑO DEL PANEL MÉDICO
+   ========================================== */
+
+body.panel-medico {
+    --azul-principal: #2463a6;
+    --azul-oscuro: #173b65;
+    --azul-claro: #eaf3fc;
+    --fondo: #f3f7fc;
+    --texto: #243447;
+    --texto-secundario: #64748b;
+    --borde: #dce6f0;
+
+    margin: 0;
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.5;
+}
+
+/* Contenido principal */
+body.panel-medico .dashboard {
+    width: min(1200px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 32px 0 48px;
+}
+
+/* Título principal */
+body.panel-medico .dashboard > h2 {
+    margin: 0 0 28px;
+    color: var(--azul-oscuro);
+    text-align: left;
+    font-size: 30px;
+    font-weight: 750;
+    letter-spacing: -0.6px;
+}
+
+/* Tarjetas principales */
+body.panel-medico .card {
+    margin: 0 0 24px;
+    padding: 26px;
+    background: #ffffff;
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(31, 65, 105, 0.06);
+}
+
+/* Títulos de las tarjetas */
+body.panel-medico .card h3 {
+    margin: 0 0 18px;
+    color: var(--azul-oscuro);
+    text-align: left;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+/* Textos que abren o cierran secciones */
+body.panel-medico .card p[onclick] {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 0 16px;
+    padding: 9px 14px;
+    color: var(--azul-principal);
+    background: var(--azul-claro);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+body.panel-medico .card p[onclick]:hover {
+    background: #d8e9fb;
+}
+
+/* Lista de pacientes */
+body.panel-medico #listaPacientes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.panel-medico #listaPacientes li {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+/* Botones con los nombres de los pacientes */
+body.panel-medico #listaPacientes li button {
+    width: 100%;
+    min-height: 46px;
+    margin: 0;
+    padding: 12px 15px;
+    color: var(--azul-oscuro);
+    background: #ffffff;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+body.panel-medico #listaPacientes li button:hover {
+    background: var(--azul-claro);
+    border-color: #8ab5e3;
+    transform: translateY(-1px);
+}
+
+/* Tabla del historial */
+body.panel-medico #historialPaciente {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+/* Encabezados */
+body.panel-medico #historialPaciente thead th {
+    padding: 14px 12px;
+    color: #ffffff;
+    background: var(--azul-principal);
+    border: 0;
+    text-align: left;
+    white-space: nowrap;
+    font-weight: 650;
+}
+
+/* Celdas */
+body.panel-medico #historialPaciente tbody td {
+    padding: 13px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--borde);
+    background: #ffffff;
+    white-space: nowrap;
+}
+
+/* Filas alternas */
+body.panel-medico #historialPaciente tbody tr:nth-child(even) td {
+    background: #f7faff;
+}
+
+/* Última fila sin borde inferior */
+body.panel-medico #historialPaciente tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* Cierre de sesión del panel médico */
+body.panel-medico > a[href="index.html"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 0 30px max(20px, calc((100% - 1200px) / 2));
+    padding: 11px 18px;
+
+    color: #ffffff;
+    background: #2463a6;
+    border: 1px solid #2463a6;
+    border-radius: 9px;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+body.panel-medico > a[href="index.html"]:hover {
+    background: #173b65;
+    border-color: #173b65;
+    transform: translateY(-1px);
+}
+
+/* Alineación en pantallas pequeñas */
+@media (max-width: 700px) {
+    body.panel-medico > a[href="index.html"] {
+        margin-left: 12px;
+    }
+}
+
+
+/* Adaptación para celulares y pantallas pequeñas */
+@media (max-width: 700px) {
+    body.panel-medico .dashboard {
+        width: calc(100% - 24px);
+        padding-top: 22px;
+    }
+
+    body.panel-medico .dashboard > h2 {
+        font-size: 25px;
+    }
+
+    body.panel-medico .card {
+        padding: 18px;
+        border-radius: 12px;
+    }
+
+    body.panel-medico #listaPacientes {
+        grid-template-columns: 1fr;
+    }
+
+    body.panel-medico #historialPaciente {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+
+
+
+/* Paciente seleccionado en el panel médico */
+body.panel-medico #listaPacientes li button.paciente-seleccionado {
+    color: #ffffff;
+    background: #2463a6;
+    border-color: #2463a6;
+    box-shadow: 0 3px 10px rgba(36, 99, 166, 0.18);
+}
+
+body.panel-medico #listaPacientes li button.paciente-seleccionado:hover {
+    background: #173b65;
+    border-color: #173b65;
+}

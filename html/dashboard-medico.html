@@ -5,15 +5,15 @@
   <title>Médico</title>
   <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body>
+<body class="panel-medico">
 
 <div class="dashboard">
   <h2>Panel Médico</h2>
 
   <div class="card">
-    <h3>gestionar Citas</h3>
+    <h3>Gestionar Citas</h3>
     <p onclick="toggle('formulariocitas')">
-      gestion de citas
+      Programar Citas
     </p>
     <form id="formulariocitas"  style="display:none" onsubmit="agendarcitas(event)">
       <label>seleccionar paciente</label>
@@ -32,6 +32,9 @@
   </form>
     
     <h4> Citas</h4>
+    <p onclick="toggle('listaCitas')">
+      Ver Citas Registradas
+    </p>
     <ul id="listaCitas">
     </ul>
   </div> 
@@ -39,28 +42,36 @@
   <div class="card">
     <h3>Pacientes Registrados</h3>
     <p onclick="toggle('listaPacientes')">
-      ver pacientes registrados
+      Ver Pacientes Registrados
     </p>
     <ul id="listaPacientes" style="display:none">
     </ul>
   </div>
 
 <div class="card">
-  <h3>Historial del paciente</h3>
-  <p onclick="toggle('historialPaciente')">
-    ver historial del paciente
-  </p>
-    <table id="historialPaciente" style="display:none">
-      <thead>
+  
+<h3>Historial del paciente</h3>
+
+<p onclick="toggle('historialPaciente')">
+    Ver Historial del Paciente
+</p>
+
+<table id="historialPaciente" style="display:none">
+    <thead>
         <tr>
-          <th>Fecha</th>
-          <th>Colesterol</th>
-          <th>Triglicéridos</th>
+            <th>Fecha</th>
+            <th>Colesterol total</th>
+            <th>HDL</th>
+            <th>LDL</th>
+            <th>VLDL</th>
+            <th>Triglicéridos</th>
         </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    </thead>
+
+    <tbody>
+    </tbody>
+</table>
+
   </div>
 
   </div>
