@@ -678,3 +678,164 @@ function toggle(elementId) {
     element.style.display = "none";
   }
 } 
+
+
+/* ==========================================
+   GESTIÓN DE CITAS - LIPOCONTROL
+   ========================================== */
+
+// Cargar pacientes en el selector de citas
+async function cargarPacientesCitas() {
+    const selector = document.getElementById("paciente");
+    if (!selector) return;
+
+    selector.innerHTML = '<option value="">Cargando pacientes...</option>';
+
+    const { data, error } = await supabaseClient
+        .from("usuarios")
+        .select("nombre, correo")
+        .eq("tipo", "paciente");
+
+    if (error) {
+        console.error("Error al cargar pacientes:", error);
+        selector.innerHTML =
+            '<option value="">No se pudieron cargar los pacientes</option>';
+        return;
+    }
+
+    selector.innerHTML =
+        '<option value="">-- Seleccionar paciente --</option>';
+
+    (data || []).forEach((paciente) => {
+        const opcion = document.createElement("option");
+        opcion.value = paciente.correo;
+        opcion.textContent = paciente.nombre;
+        selector.appendChild(opcion);
+    });
+}
+
+
+// Registrar una cita
+
+function obtenerFechaLocal() {
+    const ahora = new Date();
+
+    const anio = ahora.getFullYear();
+    const mes = String(ahora.getMonth() + 1).padStart(2, "0");
+    const dia = String(ahora.getDate()).padStart(2, "0");
+
+    return `${anio}-${mes}-${dia}`;
+}
+
+
+function obtenerFechaLocal() {
+    const ahora = new Date();
+
+    const anio = ahora.getFullYear();
+    const mes = String(ahora.getMonth() + 1).padStart(2, "0");
+    const dia = String(ahora.getDate()).padStart(2, "0");
+
+    return `${anio}-${mes}-${dia}`;
+}
+    event.preventDefault();
+
+    const paciente = document.getElementById("paciente").value;
+    const fecha = document.getElementById("fecha").value;
+    const hora = document.getElementById("horacita").value;
+    const lugar = document.getElementById("lugarcita").value.trim();
+    const motivo = document.getElementById("motivocita").value.trim();
+
+    if (!paciente || !fecha || !hora || !lugar || !motivo) {
+        alert("Completa todos los campos para agendar la cita.");
+        return;
+    }
+
+    
+if (fecha < obtenerFechaLocal()) {
+    alert("La fecha de la cita no puede estar en el pasado.");
+    return;
+}
+
+
+    const { error } = await supabaseClient
+        .from("citas")
+        .insert([{
+            paciente_correo: paciente,
+            fecha: fecha,
+            hora: hora,
+            lugar: lugar,
+            motivo: motivo,
+            estado: "Programada"
+        }]);
+
+    if (error) {
+        console.error("Error al agendar la cita:", error);
+        alert("No se pudo guardar la cita. Revisa la consola y los permisos de Supabase.");
+        return;
+    }
+
+    alert("¡Cita agendada correctamente!");
+
+    document.getElementById("formulariocitas").reset();
+
+    await mostrarCitas();
+
+
+// Consultar y mostrar las citas registradas
+async function mostrarCitas() {
+    const lista = document.getElementById("listaCitas");
+    if (!lista) return;
+
+    lista.innerHTML = "<li>Cargando citas...</li>";
+
+    const { data: citas, error } = await supabaseClient
+        .from("citas")
+        .select("*")
+        .order("fecha", { ascending: true })
+        .order("hora", { ascending: true });
+
+    if (error) {
+        console.error("Error al consultar citas:", error);
+        lista.innerHTML = "<li>No se pudieron cargar las citas.</li>";
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    if (!citas || citas.length === 0) {
+        lista.innerHTML = "<li>No hay citas registradas.</li>";
+        return;
+    }
+
+    // Obtener nombres de los pacientes
+    const { data: pacientes, error: errorPacientes } = await supabaseClient
+        .from("usuarios")
+        .select("nombre, correo")
+        .eq("tipo", "paciente");
+
+    if (errorPacientes) {
+        console.error("Error al consultar pacientes:", errorPacientes);
+    }
+
+    const nombres = new Map(
+        (pacientes || []).map((paciente) => [
+            paciente.correo,
+            paciente.nombre
+        ])
+    );
+
+    citas.forEach((cita) => {
+        const li = document.createElement("li");
+
+        const nombrePaciente =
+            nombres.get(cita.paciente_correo) || cita.paciente_correo;
+
+        const detalle = document.createElement("div");
+        detalle.textContent =
+            `${nombrePaciente} | ${cita.fecha} | ${String(cita.hora).slice(0, 5)} | ` +
+            `${cita.lugar} | ${cita.motivo} | Estado: ${cita.estado}`;
+
+        li.appendChild(detalle);
+        lista.appendChild(li);
+    });
+}

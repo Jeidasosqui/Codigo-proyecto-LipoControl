@@ -119,3 +119,73 @@ async function apiHistorialPaciente(correoPaciente) {
   }
   return { data, error: null };
 }
+
+
+/* ============================================
+   SERVICIOS DE CITAS
+   ============================================ */
+
+// Enviar una solicitud para agendar una cita
+async function apiAgendarCita(cita) {
+    try {
+        const response = await fetch("http://localhost:3001/citas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(cita)
+        });
+
+        const resultado = await response.json();
+
+        if (!response.ok || !resultado.ok) {
+            return {
+                data: null,
+                error: resultado.mensaje || "No se pudo agendar la cita"
+            };
+        }
+
+        return {
+            data: resultado.cita,
+            error: null
+        };
+
+    } catch (error) {
+        console.error("Error al comunicarse con la API:", error);
+
+        return {
+            data: null,
+            error: "No fue posible conectar con el servidor"
+        };
+    }
+}
+
+
+// Consultar las citas registradas
+async function apiObtenerCitas() {
+    try {
+        const response = await fetch("http://localhost:3001/citas");
+
+        const resultado = await response.json();
+
+        if (!response.ok || !resultado.ok) {
+            return {
+                data: null,
+                error: resultado.mensaje || "No se pudieron consultar las citas"
+            };
+        }
+
+        return {
+            data: resultado.citas,
+            error: null
+        };
+
+    } catch (error) {
+        console.error("Error al consultar las citas:", error);
+
+        return {
+            data: null,
+            error: "No fue posible conectar con el servidor"
+        };
+    }
+}
